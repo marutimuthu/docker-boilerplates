@@ -1,0 +1,27 @@
+{
+    "name": "node-red-project",
+    "description": "A Node-RED Project",
+    "version": "0.0.1",
+    "dependencies": {
+        "node-red-contrib-influxdb": "^0.6.1",
+        "@node-red-contrib-themes/theme-collection": "^3.0.6",
+        "node-red-contrib-opcua": "^0.2.117",
+        "node-red-contrib-opcua-server": "~1.1.1",
+        "node-red-contrib-mssql": "^0.0.7",
+        "node-red-contrib-kafka-manager": "~0.5.1",
+        "node-red-contrib-aws-iot-hub": "~0.1.14",
+        "node-red-contrib-azure-blob-storage": "~0.4.0",
+        "node-red-contrib-azure-iot-hub": "~0.4.0",
+        "node-red-contrib-json-msg": "~1.0.0",
+        "node-red-contrib-mongodb": "~0.3.4",
+        "node-red-contrib-openhab2": "~1.1.8",
+        "node-red-contrib-semilimes": "~1.0.43",
+        "node-red-node-aws": "~0.2.3",
+        "node-red-contrib-whatsapp-cmb": "~1.0.2",
+        "node-red-contrib-sms-twilio": "~0.0.2",
+        "node-red-contrib-nexmo": "~3.3.1",
+        "node-red-node-email": "~2.0.1",
+        "node-red-node-twilio": "~0.1.0",
+        "ui-upload-mf": "~0.1.0"
+    }
+}

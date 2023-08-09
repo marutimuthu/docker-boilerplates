@@ -1,0 +1,97 @@
+version: '3.6'
+volumes:
+    influxdb-data: 
+    influxdb-backup: 
+    nodered-data: 
+    grafana-data: 
+    # jupyterlab-data:
+
+services:
+  portainer:
+    restart: always
+    build: ./portainer
+    ports:
+      - 9443:9443
+      - 8000:8000
+    volumes:
+      - ./volumes/portainer/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  nodered:
+    restart: always
+    build: ./nodered
+    volumes:
+      - './volumes/nodered/data:/data'
+    ports:
+      - "1880:1880"
+  
+  influxdb:
+    restart: always
+    build: ./influxdb
+    environment:
+      - INFLUXDB_DB=ming_default
+      # - INFLUX_USERNAME=admin
+      # - INFLUX_PASSWORD=1234
+    volumes:
+      - './volumes/influxdb/data:/var/lib/influxdb'
+      - './volumes/influxdb/backup:/var/lib/influxdb/backup'
+    ports:
+      - "8086:8086"
+  
+  grafana:
+    restart: always
+    build: ./grafana
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    ports:
+      - "3000:3000"
+    volumes:
+      - './volumes/grafana/data:/var/lib/grafana'
+    depends_on:
+      - influxdb
+  
+  mosquitto:
+    restart: always
+    build: ./mosquitto
+    ports:
+      - "1883:1883"
+      - "1884:1884"
+    # volumes:
+      # - ./volumes/mosquitto/config:/mosquitto/config
+      # - ./volumes/mosquitto/data:/mosquitto/data
+      # - ./volumes/mosquitto/log:/mosquitto/log
+      # - ./volumes/mosquitto/pwfile:/mosquitto/pwfile
+
+  emqx1:
+    # container_name: emqx
+    build: ./emqx
+    environment:
+    - "EMQX_NODE_NAME=emqx@node1.emqx.io"
+    - "EMQX_CLUSTER__DISCOVERY_STRATEGY=static"
+    # - "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.io,emqx@node2.emqx.io]"
+    healthcheck:
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
+      interval: 5s
+      timeout: 25s
+      retries: 5
+    # networks:
+    #   emqx-bridge:
+    #     aliases:
+    #     - node1.emqx.io
+    ports:
+      # - 1883:1883
+      - 8083:8083
+      - 8084:8084
+      - 8883:8883
+      - 18083:18083 
+    volumes:
+      - ./volumes/emqx/data:/opt/emqx/data
+
+#  jupyterlab:
+#    restart: always
+#    build: ./jupyterlab
+#    ports:
+#      - "8888:8888"
+#    volumes:
+#      - 'jupyterlab-data:/data'
