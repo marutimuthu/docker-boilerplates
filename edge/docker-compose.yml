@@ -7,18 +7,19 @@ volumes:
   # jupyterlab-data:
 
 services:
-  # portainer:
-  #   restart: always
-  #   build: ./portainer
-  #   ports:
-  #     - 9443:9443
-  #     - 8000:8000
-  #   volumes:
-  #     - ./volumes/portainer/data:/data
-  #     - /var/run/docker.sock:/var/run/docker.sock
+  portainer:
+    user: ${CURRENT_UID}
+    restart: always
+    build: ./portainer
+    ports:
+      - 9443:9443
+      - 8000:8000
+    volumes:
+      - ./volumes/portainer/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
 
   nodered:
-    user: "1000:1000"
+    user: ${CURRENT_UID}
     restart: always
     build: ./nodered
     volumes:
@@ -27,6 +28,7 @@ services:
       - 1880:1880
   
   influxdb:
+    user: ${CURRENT_UID}
     restart: always
     build: ./influxdb
     environment:
@@ -40,7 +42,7 @@ services:
       - 8086:8086
   
   grafana:
-    user: "1000:1000"
+    user: ${CURRENT_UID}
     restart: always
     build: ./grafana
     environment:
@@ -54,6 +56,7 @@ services:
       - influxdb
   
   mosquitto:
+    user: ${CURRENT_UID}
     restart: always
     build: ./mosquitto
     ports:
