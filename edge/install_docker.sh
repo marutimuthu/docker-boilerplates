@@ -15,8 +15,10 @@ sudo apt-get update
 # Install Docker
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
-# Allow user access
-#sudo chmod 666 /var/run/docker.sock
+# Add user to docker group
+sudo usermod -aG docker ${USER}
+sudo systemctl restart docker
+sudo chmod 666 /var/run/docker.sock
 
 # List the available versions:
 # apt-cache madison docker-ce | awk '{ print $3 }'
